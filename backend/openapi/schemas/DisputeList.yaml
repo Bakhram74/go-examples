@@ -1,0 +1,48 @@
+type: object
+required:
+  - dispute_id
+  - complainant_name
+  - complainant_employee_id
+  - goods_id
+  - tare_id
+  - tare_type
+  - created_at
+  - lostreason_val
+  - lost_amount
+  - status
+  - currency_code
+  - organization_title
+properties:
+  dispute_id:
+    type: string
+  complainant_name:
+    type: string
+  complainant_employee_id:
+    type: string
+  goods_id:
+    type: integer
+    format: int64
+  tare_id:
+    type: integer
+    format: int64
+  tare_type:
+    type: string
+  created_at:
+    type: string
+    fomrat: date-time
+  lostreason_val:
+    type: string
+  lost_amount:
+    type: number
+  responsible_person_name:
+    type: string
+  status:
+    $ref: "./EntityStatus.yaml"
+  currency_code:
+    type: integer
+    format: int64
+  closed_at:
+    type: string
+    fomrat: date-time
+  organization_title:
+    type: string

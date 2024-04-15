@@ -1,0 +1,71 @@
+version: "3.9"
+services:
+  backend:
+    build: ./backend
+    command: >
+      sh -c " if [ '$DEBUG' = 'true' ]; then
+        /bin/dlv --listen=:2345 --headless=true --log=true --accept-multiclient --api-version=2 exec /app;
+      else
+        /app;
+      fi "
+    expose:
+      - 8000
+      - 2345
+    depends_on:
+      - postgres
+      - minio
+  postgres:
+    container_name: postgres
+    image: postgres
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: "user"
+      POSTGRES_PASSWORD: "pass"
+      POSTGRES_DB: "postgres"
+    expose:
+      - 5432
+    ports:
+      - 5432:5432
+  minio:
+    image: minio/minio
+    ports:
+      - 9000:9000
+      - 9001:9001
+    volumes:
+      - minio-data:/data
+    environment:
+      MINIO_ROOT_USER: developer
+      MINIO_ROOT_PASSWORD: user1234
+    command: server --console-address ":9001" /data
+  centrifugo:
+    container_name: centrifugo
+    image: centrifugo/centrifugo:v5
+    volumes:
+      - ./config/centrifugo.json:/centrifugo/config.json
+    command: centrifugo -c config.json
+    expose:
+      - 8000
+    ulimits:
+      nofile:
+        soft: 65535
+        hard: 65535
+  swagger-ui:
+    image: swaggerapi/swagger-ui
+    environment:
+      - SWAGGER_JSON=/backend/openapi/openapi-config.yaml
+    volumes:
+      - ./backend/openapi/:/backend/openapi
+    ports:
+      - 8080:8080
+  reverse_proxy:
+    build: ./nginx
+    ports:
+      - 3000:80
+    depends_on:
+      - backend
+      - frontend
+      - centrifugo
+volumes:
+  pg-data:
+  minio-data:

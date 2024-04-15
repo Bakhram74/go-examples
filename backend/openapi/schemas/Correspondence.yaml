@@ -1,0 +1,20 @@
+type: object
+required:
+  - correspondence_id
+  - revision_id
+  - sender_id
+  - created_at
+properties:
+  correspondence_id:
+    type: string
+  revision_id:
+    type: string
+  sender_id:
+    type: string
+  created_at:
+    type: string
+    format: date-time
+  message_body:
+    type: string
+  attachment_path:
+    type: string

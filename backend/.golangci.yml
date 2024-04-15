@@ -1,0 +1,126 @@
+run:
+  # Линты включены на тестах
+  tests: true
+  # Время проверки на коде
+  timeout: 5m
+  go: '1.21'
+  # Пропускать проверку в файлах
+  # пропускаю файлы сгенерированных openapi (.gen.go)
+  skip-files:
+    - '.*\\.gen\\.go$'
+  allow-parallel-runners: true
+output:
+  format: tab
+  sort-results: true
+issues:
+  max-issues-per-linter: 75
+  max-same-issues: 5
+linters:
+  disable-all: true
+  enable:
+    - errcheck
+    - gosimple
+    - ineffassign
+    - staticcheck
+    - unused
+    - asciicheck
+    - bidichk
+    - bodyclose
+    - containedctx
+    - decorder
+    - dogsled
+    - dupl
+    - dupword
+    - durationcheck
+    - errchkjson
+    - errname
+    - errorlint
+    - exhaustive
+    - exportloopref
+    - forbidigo
+    - funlen
+    - ginkgolinter
+    - gocheckcompilerdirectives
+    - gochecksumtype
+    - goconst
+    - gocritic
+    - gocyclo
+    - gofmt
+    - gofumpt
+    - gomnd
+    - gosec
+    - gosmopolitan
+    - grouper
+    - inamedparam
+    - interfacebloat
+    - lll
+    - loggercheck
+    - maintidx
+    - makezero
+    - misspell
+    - musttag
+    - nakedret
+    - nestif
+    - nilerr
+    - nolintlint
+    - perfsprint
+    - prealloc
+    - predeclared
+    - sloglint
+    - tenv
+    - testableexamples
+    - unconvert
+    - unparam
+    - whitespace
+    # in test
+    - gocognit
+    - goprintffuncname
+    - importas
+    - noctx
+    - nonamedreturns
+    - nosprintfhostport
+    - promlinter
+    - protogetter
+    - reassign
+    - sqlclosecheck
+    - testifylint
+    - usestdlibvars
+    - wrapcheck
+    - zerologlint
+linters-settings:
+  errcheck:
+    exclude-functions:
+      - (*os.File).WriteString
+    # Проверка ошибки при приведении типов. Включено для исключения вероятности паники
+    check-type-assertions: true
+    # Проверка на пропуск обработки ошибки. Ошибка в любом случае должна быть обработана
+    check-blank: true
+  exhaustive:
+    default-signifies-exhaustive: true
+  staticcheck:
+    go: "1.21"
+  stylecheck:
+    go: "1.21"
+  gomnd:
+    settings:
+      mnd:
+        checks:
+          - argument
+          - case
+          - condition
+          - operation
+          - return
+          - assign
+        ignored-functions: math.*|strconv.*|rand.*|time.*
+  wsl:
+    force-err-cuddling: true
+  wrapcheck:
+    ignorePackageGlobs:
+      - wh-hard01.kol.wb.ru/*
+  gosec:
+    excludes:
+      - G101 # Look for hard coded credentials
+  nestif:
+    min-complexity: 5
+  gocyclo:
+    min-complexity: 20

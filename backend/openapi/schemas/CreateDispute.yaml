@@ -1,0 +1,34 @@
+type: object
+required:
+  - dispute_id
+  - shortage_id
+  - organization_id
+  - is_shortage_canceled
+  - is_dispute_reopened
+  - status
+  - created_at
+  - is_arbitr_invited
+properties:
+  dispute_id:
+    type: string
+  shortage_id:
+    type: string
+  organization_id:
+    type: string
+  is_shortage_canceled:
+    type: boolean
+  is_dispute_reopened:
+    type: boolean
+  status:
+    $ref: "./EntityStatus.yaml"
+  created_at:
+    type: string
+    format: date-time
+  closed_at:
+    type: string
+    format: date-time
+  reopened_at:
+    type: string
+    format: date-time
+  is_arbitr_invited:
+    type: boolean

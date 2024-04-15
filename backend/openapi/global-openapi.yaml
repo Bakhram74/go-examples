@@ -1,0 +1,917 @@
+openapi: 3.1.0
+info:
+  title: Single Window API
+  version: 1.0.0
+paths:
+  /api/v1/dispute:
+    post:
+      tags:
+        - Disputes
+      summary: Создание нового спора
+      operationId: CreateDisputeV1
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - shortage_id
+                - organization_id
+                - message_body
+              properties:
+                shortage_id:
+                  type: string
+                organization_id:
+                  type: string
+                message_body:
+                  type: string
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: Возращает данные по созданному спору
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateDispute'
+      security:
+        - SWCookieAuth: []
+    get:
+      tags:
+        - Disputes
+      summary: Получить спор по dispute_id
+      operationId: GetDisputeV1
+      parameters:
+        - in: query
+          name: disputeId
+          schema:
+            type: string
+        - in: query
+          name: goodsId
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Успешный ответ
+          content:
+            aplication/json:
+              schema:
+                $ref: '#/components/schemas/Dispute'
+      security:
+        - SWCookieAuth: []
+    put:
+      tags:
+        - Disputes
+      summary: Закрыть спор по dispute_id
+      operationId: CloseDisputeV1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - dispute_id
+              properties:
+                dispute_id:
+                  type: string
+                guilty_worker_ids:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Закрытие спора и назначение виновных
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CloseDispute'
+      security:
+        - SWCookieAuth: []
+  /api/v1/disputes:
+    get:
+      tags:
+        - Disputes
+      summary: Получить список споров
+      operationId: GetDisputesV1
+      parameters:
+        - in: query
+          name: offset
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+          required: false
+          description: Смещение с которого необходимо получить споры
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            default: 10
+          required: false
+          description: Количество возращаемых споров
+        - in: query
+          name: status
+          required: false
+          schema:
+            $ref: '#/components/schemas/EntityStatus'
+          description: Статус возвращаемых споров
+      responses:
+        '200':
+          description: Возвращает массив объектов "Dispute"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DisputeList'
+      security:
+        - SWCookieAuth: []
+  /api/v1/shortages:
+    get:
+      tags:
+        - Lostgoods
+      summary: Получить список списаний
+      operationId: GetShortagesV1
+      parameters:
+        - in: query
+          name: offset
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+          required: false
+          description: Смещение с которого необходимо получить списания
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            default: 10
+          required: false
+          description: Количество возвращаемых списаний
+      responses:
+        '200':
+          description: Возвращает список списаний
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Shortage'
+      security:
+        - SWCookieAuth: []
+  /api/v1/messages:
+    get:
+      tags:
+        - Messages
+      summary: Получить список сообщений
+      operationId: GetMessagesV1
+      parameters:
+        - in: query
+          name: offset
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+          required: false
+          description: Смещение с которого необходимо получить сообщения
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            default: 10
+          required: false
+          description: Количество возращаемых сообщений
+        - in: query
+          name: disputeId
+          schema:
+            type: string
+          required: true
+          description: ID спора, по которому нужно найти сообщения
+      responses:
+        '200':
+          description: Возвращает массив сообщений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+      security:
+        - SWCookieAuth: []
+  /api/v1/message:
+    post:
+      tags:
+        - Messages
+      summary: Создание нового сообщения
+      operationId: CreateMessageV1
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - dispute_id
+              properties:
+                dispute_id:
+                  type: string
+                message_body:
+                  type: string
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: Возращает данные по созданному сообщению
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateMsgResponse'
+      security:
+        - SWCookieAuth: []
+  /api/v1/token:
+    post:
+      tags:
+        - Auth
+      summary: Авторизация пользователя
+      operationId: AuthUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - phone_number
+                - code
+                - sticker
+              properties:
+                phone_number:
+                  type: string
+                code:
+                  type: integer
+                sticker:
+                  type: string
+      parameters:
+        - in: header
+          name: X-Real-IP
+          schema:
+            type: string
+          required: true
+          description: IP пользователя
+        - in: header
+          name: deviceId
+          schema:
+            type: string
+          required: false
+          description: ID устройства пользователя
+        - in: header
+          name: X-Request-ID
+          schema:
+            type: string
+          required: false
+          description: ID запроса пользователя для обеспечения идемпотентности
+        - in: header
+          name: deviceToken
+          schema:
+            type: string
+          required: false
+          description: Токен устройства для отправки пушей
+        - in: header
+          name: deviceName
+          schema:
+            type: string
+          required: false
+          description: Название устройства
+        - in: header
+          name: wb-apptype
+          schema:
+            type: string
+          required: false
+          description: Тип приложения клиента, тип устройства для отправки пушей
+        - in: header
+          name: wb-appversion
+          schema:
+            type: string
+          required: false
+          description: Версия приложения клиента
+        - in: header
+          name: X-No-Session
+          schema:
+            type: boolean
+          required: false
+          description: Если метод нужен только для аутентификации по телефону, без сохранения сессии. deviceId, deviceName, deviceToken и wb-apptype в данном случае указывать не нужно
+        - in: header
+          name: X-Forwarded-Host
+          schema:
+            type: string
+          required: false
+          description: Токен устройства для отправки пушейИсходный хост, который будет выставляться в поле Domain для Cookie
+        - in: header
+          name: X-Forwarded-Path
+          schema:
+            type: string
+          required: false
+          description: Токен устройства для отправки пушейИсходный путь, который будет выставляться в поле Path для Cookie
+      responses:
+        '201':
+          description: Возращает объект "TokenData"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenData'
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+  /api/v1/revisions:
+    get:
+      tags:
+        - Revisions
+      summary: Получить список ревизий
+      operationId: GetRevisionsV1
+      parameters:
+        - in: query
+          name: disputeId
+          schema:
+            type: string
+          required: false
+          description: ID Спора для которого необходимо получить ревизии (если указан и disputeId, и status, то выборка осуществляется по disputeId)
+        - in: query
+          name: offset
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+          required: false
+          description: Смещение с которого необходимо получить ревизии
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            default: 10
+          required: false
+          description: Количество возращаемых ревизий
+        - in: query
+          name: status
+          required: false
+          schema:
+            $ref: '#/components/schemas/EntityStatus'
+          description: Статус возвращаемых ревизий (если указан и disputeId, и status, то выборка осуществляется по disputeId)
+      responses:
+        '200':
+          description: Возвращает массив объектов "Revision"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Revision'
+      security:
+        - SWCookieAuth: []
+  /api/v1/revision:
+    get:
+      tags:
+        - Revisions
+      summary: Получить ревизию по revisionId
+      operationId: GetRevisionV1
+      parameters:
+        - in: query
+          name: revisionId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Вовращает данные по ревизии
+          content:
+            aplication/json:
+              schema:
+                $ref: '#/components/schemas/Revision'
+      security:
+        - SWCookieAuth: []
+    post:
+      tags:
+        - Revisions
+      summary: Создание новой ревизии
+      operationId: CreateRevisionV1
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - dispute_id
+                - organization_id
+                - message_body
+              properties:
+                dispute_id:
+                  type: string
+                organization_id:
+                  type: string
+                message_body:
+                  type: string
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: Возращает данные по созданной ревизии
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Revision'
+      security:
+        - SWCookieAuth: []
+  /api/v1/organizations:
+    get:
+      tags:
+        - Organizations
+      summary: Получить список организаций
+      operationId: GetOrganizationsV1
+      parameters:
+        - in: query
+          name: organizationCode
+          schema:
+            type: string
+          required: false
+          description: Тип организации по которому осущствляется поиск
+        - in: query
+          name: offset
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+          required: false
+          description: Смещение с которого необходимо получить организации
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            default: 20
+          required: false
+          description: Количество возращаемых организаций
+        - in: query
+          name: searchToken
+          schema:
+            type: string
+          required: false
+          description: Токен поиска
+      responses:
+        '200':
+          description: Возвращает список организаций
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Organization'
+      security:
+        - SWCookieAuth: []
+  /api/v1/revision/correspondences:
+    get:
+      tags:
+        - Revisions
+      summary: Получить список кореспонденций по revision id
+      operationId: GetCorrespondencesV1
+      parameters:
+        - in: query
+          name: revision_id
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: offset
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+          required: false
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            default: 10
+          required: false
+      responses:
+        '200':
+          description: Возвращает список кореспонденций
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Correspondence'
+      security:
+        - SWCookieAuth: []
+components:
+  schemas:
+    Correspondence:
+      type: object
+      required:
+        - correspondence_id
+        - revision_id
+        - sender_id
+        - created_at
+      properties:
+        correspondence_id:
+          type: string
+        revision_id:
+          type: string
+        sender_id:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        message_body:
+          type: string
+        attachment_path:
+          type: string
+    DisputeRole:
+      type: object
+      required:
+        - user_id
+        - dispute_id
+        - dispute_role
+        - created_at
+      properties:
+        user_id:
+          type: string
+        dispute_id:
+          type: string
+        dispute_role:
+          type: string
+          enum:
+            - complainant
+            - responsible_person
+            - guilty_responsible_person
+            - guilty_worker
+        created_at:
+          type: string
+          format: date-time
+    EntityStatus:
+      type: string
+      enum:
+        - opened
+        - in_work
+        - closed
+        - any
+      default: any
+    CloseDispute:
+      type: object
+      required:
+        - status
+        - closed_at
+        - guilty_worker_names
+        - is_shortage_canceled
+      properties:
+        status:
+          $ref: '#/components/schemas/EntityStatus'
+        closed_at:
+          type: string
+        guilty_worker_names:
+          type: array
+          x-oapi-codegen-extra-tags:
+            gorm: type:text[]
+          items:
+            type: string
+        is_shortage_canceled:
+          type: boolean
+    CreateDispute:
+      type: object
+      required:
+        - dispute_id
+        - shortage_id
+        - organization_id
+        - is_shortage_canceled
+        - is_dispute_reopened
+        - status
+        - created_at
+        - is_arbitr_invited
+      properties:
+        dispute_id:
+          type: string
+        shortage_id:
+          type: string
+        organization_id:
+          type: string
+        is_shortage_canceled:
+          type: boolean
+        is_dispute_reopened:
+          type: boolean
+        status:
+          $ref: '#/components/schemas/EntityStatus'
+        created_at:
+          type: string
+          format: date-time
+        closed_at:
+          type: string
+          format: date-time
+        reopened_at:
+          type: string
+          format: date-time
+        is_arbitr_invited:
+          type: boolean
+    Dispute:
+      type: object
+      required:
+        - dispute_id
+        - status
+        - complainant_name
+        - responsible_person_name
+        - guilty_responsible_person_name
+        - guilty_worker_names
+        - is_shortage_canceled
+        - created_at
+        - closed_at
+        - goods_id
+        - tare_id
+        - tare_type
+        - lost_amount
+        - currency_code
+        - lostreason_val
+      properties:
+        dispute_id:
+          type: string
+        status:
+          type: string
+        complainant_name:
+          type: string
+        responsible_person_name:
+          type: string
+        guilty_worker_names:
+          type: array
+          x-oapi-codegen-extra-tags:
+            gorm: type:text[]
+          items:
+            type: string
+        guilty_responsible_person_name:
+          type: string
+        is_shortage_canceled:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        closed_at:
+          type: string
+          format: date-time
+        goods_id:
+          type: integer
+        tare_id:
+          type: integer
+        tare_type:
+          type: string
+        lost_amount:
+          type: number
+          format: double
+        currency_code:
+          type: string
+        lostreason_val:
+          type: string
+    DisputeList:
+      type: object
+      required:
+        - dispute_id
+        - complainant_name
+        - complainant_employee_id
+        - goods_id
+        - tare_id
+        - tare_type
+        - created_at
+        - lostreason_val
+        - lost_amount
+        - status
+        - currency_code
+        - organization_title
+      properties:
+        dispute_id:
+          type: string
+        complainant_name:
+          type: string
+        complainant_employee_id:
+          type: string
+        goods_id:
+          type: integer
+          format: int64
+        tare_id:
+          type: integer
+          format: int64
+        tare_type:
+          type: string
+        created_at:
+          type: string
+          fomrat: date-time
+        lostreason_val:
+          type: string
+        lost_amount:
+          type: number
+        responsible_person_name:
+          type: string
+        status:
+          $ref: '#/components/schemas/EntityStatus'
+        currency_code:
+          type: integer
+          format: int64
+        closed_at:
+          type: string
+          fomrat: date-time
+        organization_title:
+          type: string
+    DisputeChat:
+      type: object
+      required:
+        - message_id
+        - dispute_id
+        - sender_id
+        - created_at
+      properties:
+        message_id:
+          type: string
+        dispute_id:
+          type: string
+        sender_id:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        message_body:
+          type: string
+        attachment_path:
+          type: string
+    Shortage:
+      type: object
+      required:
+        - shortage_id
+        - user_id
+        - goods_id
+        - tare_id
+        - tare_type
+        - lostreason_id
+        - currency_code
+        - lost_amount
+        - is_disputed
+        - created_at
+      properties:
+        shortage_id:
+          type: string
+        user_id:
+          type: string
+        goods_id:
+          type: integer
+        tare_id:
+          type: integer
+        tare_type:
+          type: string
+        lostreason_id:
+          type: number
+        currency_code:
+          type: string
+        lost_amount:
+          type: number
+          format: double
+        is_disputed:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+    Message:
+      type: object
+      required:
+        - message_id
+        - dispute_id
+        - sender_id
+        - sender_name
+        - sender_avatar_url
+        - role
+        - created_at
+      properties:
+        message_id:
+          type: string
+        dispute_id:
+          type: string
+        sender_id:
+          type: string
+        sender_name:
+          type: string
+        sender_avatar_url:
+          type: string
+        role:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        message_body:
+          type: string
+        attachment_path:
+          type: string
+    Claims:
+      type: object
+      required:
+        - user_id
+        - user_role
+        - organization_id
+      properties:
+        user_id:
+          type: string
+        user_role:
+          type: string
+          x-oapi-codegen-extra-tags:
+            gorm: column:role
+        employee_id:
+          type: integer
+          format: int64
+        organization_id:
+          type: string
+    TokenData:
+      type: object
+      required:
+        - claims
+        - token
+        - ttl
+      properties:
+        claims:
+          $ref: '#/components/schemas/Claims'
+        token:
+          type: string
+        ttl:
+          type: integer
+    WbxAuthCodeCheckResponse:
+      type: object
+      required:
+        - result
+      properties:
+        result:
+          type: integer
+        error:
+          type: string
+    Revision:
+      type: object
+      required:
+        - revision_id
+        - organization_id
+        - dispute_id
+        - status
+        - created_at
+      properties:
+        revision_id:
+          type: string
+        organization_title:
+          type: string
+        organization_id:
+          type: string
+        dispute_id:
+          type: string
+        status:
+          $ref: '#/components/schemas/EntityStatus'
+        created_at:
+          type: string
+          format: date-time
+        in_work_at:
+          type: string
+          format: date-time
+        closed_at:
+          type: string
+          format: date-time
+        worker_name:
+          type: string
+        worker_id:
+          type: string
+    Organization:
+      type: object
+      required:
+        - organization_id
+        - organization_title
+        - organization_code
+        - inner_id
+      properties:
+        organization_id:
+          type: string
+        organization_title:
+          type: string
+        organization_code:
+          type: string
+        inner_id:
+          type: integer
+          format: int64
+    CreateMsgResponse:
+      type: object
+      required:
+        - message_id
+      properties:
+        message_id:
+          type: string
+  securitySchemes:
+    SWCookieAuth:
+      type: apiKey
+      in: cookie
+      name: swCookieAuth

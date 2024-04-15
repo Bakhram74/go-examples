@@ -1,0 +1,35 @@
+type: object
+required:
+- shortage_id
+- user_id
+- goods_id
+- tare_id
+- tare_type
+- lostreason_id
+- currency_code
+- lost_amount
+- is_disputed
+- created_at
+properties:
+  shortage_id:
+    type: string
+  user_id:
+    type: string
+  goods_id:
+    type: integer
+  tare_id:
+    type: integer
+  tare_type:
+    type: string
+  lostreason_id:
+    type: number
+  currency_code:
+    type: string
+  lost_amount:
+    type: number
+    format: double
+  is_disputed:
+    type: boolean
+  created_at:
+    type: string
+    format: date-time

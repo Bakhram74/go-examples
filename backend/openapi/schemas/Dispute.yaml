@@ -1,0 +1,56 @@
+type: object
+required:
+- dispute_id
+- status
+- complainant_name
+- responsible_person_name
+- guilty_responsible_person_name
+- guilty_worker_names
+- is_shortage_canceled
+- created_at
+- closed_at
+- goods_id
+- tare_id
+- tare_type
+- lost_amount
+- currency_code
+- lostreason_val
+properties:
+  dispute_id:
+    type: string
+  status:
+    type: string
+  complainant_name:
+    type: string
+  responsible_person_name:
+    type: string
+  guilty_worker_names:
+    type: array
+    x-oapi-codegen-extra-tags:
+      gorm: type:text[]
+    items:
+      type: string
+  guilty_responsible_person_name:
+    type: string
+  is_shortage_canceled:
+    type: boolean
+  created_at:
+    type: string
+    format: date-time
+  closed_at:
+    type: string
+    format: date-time
+  goods_id:
+    type: integer
+  tare_id:
+    type: integer
+  tare_type:
+    type: string
+  lost_amount:
+    type: number
+    format: double
+  currency_code:
+    type: string
+  lostreason_val:
+    type: string
+ 

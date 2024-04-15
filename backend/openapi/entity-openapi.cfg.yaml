@@ -1,0 +1,6 @@
+package: entity
+generate:
+  models: true
+output: internal/entity/entities.gen.go
+output-options:
+  skip-prune: true

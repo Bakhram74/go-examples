@@ -1,0 +1,16 @@
+type: object
+required:
+  - organization_id
+  - organization_title
+  - organization_code
+  - inner_id
+properties:
+  organization_id:
+    type: string
+  organization_title:
+    type: string
+  organization_code:
+    type: string
+  inner_id:
+    type: integer
+    format: int64

@@ -1,0 +1,32 @@
+type: object
+required:
+  - revision_id
+  - organization_id
+  - dispute_id
+  - status
+  - created_at
+properties:
+  revision_id:
+    type: string
+  organization_title:
+    type: string
+  organization_id:
+    type: string
+  dispute_id:
+    type: string
+  status:
+    $ref: "./EntityStatus.yaml"
+  created_at:
+    type: string
+    format: date-time
+  in_work_at:
+    type: string
+    format: date-time
+  closed_at:
+    type: string
+    format: date-time
+  worker_name:
+    type: string
+  worker_id:
+    type: string
+    

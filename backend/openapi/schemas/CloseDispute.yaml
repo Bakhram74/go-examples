@@ -1,0 +1,19 @@
+type: object
+required:
+  - status
+  - closed_at
+  - guilty_worker_names
+  - is_shortage_canceled
+properties:
+  status:
+    $ref: "./EntityStatus.yaml"
+  closed_at:
+    type: string
+  guilty_worker_names:
+    type: array
+    x-oapi-codegen-extra-tags:
+      gorm: type:text[]
+    items:
+      type: string
+  is_shortage_canceled:
+    type: boolean

@@ -1,0 +1,21 @@
+type: object
+required:
+  - user_id
+  - dispute_id
+  - dispute_role
+  - created_at
+properties:
+  user_id:
+    type: string
+  dispute_id:
+    type: string
+  dispute_role:
+    type: string
+    enum:
+      - complainant
+      - responsible_person
+      - guilty_responsible_person
+      - guilty_worker
+  created_at:
+    type: string
+    format: date-time

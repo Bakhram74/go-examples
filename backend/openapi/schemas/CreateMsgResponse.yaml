@@ -1,0 +1,6 @@
+type: object
+required:
+  - message_id
+properties:
+  message_id:
+    type: string

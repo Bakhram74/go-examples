@@ -1,0 +1,66 @@
+openapi: 3.1.0
+info:
+  title: Single Window API
+  version: 1.0.0
+
+paths:
+  /api/v1/dispute:
+    $ref: routes/dispute/Dispute.yaml
+  /api/v1/disputes:
+    $ref: routes/dispute/GetDisputes.yaml
+  /api/v1/shortages:
+    $ref: routes/shortage/GetShortages.yaml
+  /api/v1/messages:
+    $ref: routes/message/GetMessages.yaml
+  /api/v1/message:
+    $ref: routes/message/Message.yaml
+  /api/v1/token:
+    $ref: routes/auth/GenerateToken.yaml
+  /api/v1/revisions:
+    $ref: routes/revision/GetRevisions.yaml
+  /api/v1/revision:
+    $ref: routes/revision/Revision.yaml
+  /api/v1/organizations:
+    $ref: routes/organization/GetOrganizations.yaml
+  /api/v1/revision/correspondences:
+    $ref: routes/revision/GetCorrespondence.yaml
+    
+
+components:
+  schemas:
+    Correspondence:
+      $ref: ./schemas/Correspondence.yaml
+    DisputeRole:
+      $ref: ./schemas/DisputeRole.yaml
+    EntityStatus:
+      $ref: ./schemas/EntityStatus.yaml
+    CloseDispute:
+      $ref: ./schemas/CloseDispute.yaml
+    CreateDispute:
+      $ref: ./schemas/CreateDispute.yaml
+    Dispute:
+      $ref: ./schemas/Dispute.yaml
+    DisputeList:
+      $ref: ./schemas/DisputeList.yaml
+    DisputeChat:
+      $ref: ./schemas/DisputeChat.yaml
+    Shortage:
+      $ref: ./schemas/Shortage.yaml
+    Message:
+      $ref: ./schemas/Message.yaml
+    Claims:
+      $ref: ./schemas/Claims.yaml
+    TokenData:
+      $ref: ./schemas/TokenData.yaml
+    WbxAuthCodeCheckResponse:
+      $ref: ./schemas/WbxAuthCodeCheckResponse.yaml
+    Revision:
+      $ref: "./schemas/Revision.yaml"
+    Organization:
+      $ref: "./schemas/Organization.yaml"
+  securitySchemes:
+    SWCookieAuth:
+      type: apiKey
+      in: cookie
+      name: swCookieAuth
+      

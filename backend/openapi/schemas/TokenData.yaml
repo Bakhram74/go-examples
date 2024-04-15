@@ -1,0 +1,12 @@
+type: object
+required:
+  - claims
+  - token
+  - ttl
+properties:
+  claims:
+    $ref: "./Claims.yaml"
+  token:
+    type: string
+  ttl:
+    type: integer

@@ -1,0 +1,20 @@
+type: object
+required:
+  - message_id
+  - dispute_id
+  - sender_id
+  - created_at
+properties:
+  message_id:
+    type: string
+  dispute_id:
+    type: string
+  sender_id:
+    type: string
+  created_at:
+    type: string
+    format: date-time
+  message_body:
+    type: string
+  attachment_path:
+    type: string

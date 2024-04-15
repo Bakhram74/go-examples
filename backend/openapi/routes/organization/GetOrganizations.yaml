@@ -1,0 +1,45 @@
+get:
+  tags:
+    - Organizations
+  summary: Получить список организаций
+  operationId: GetOrganizationsV1
+  parameters:
+    - in: query
+      name: organizationCode
+      schema:
+        type: string
+      required: false
+      description: Тип организации по которому осущствляется поиск
+    - in: query
+      name: offset
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+      required: false
+      description: Смещение с которого необходимо получить организации
+    - in: query
+      name: limit
+      schema:
+        type: integer
+        minimum: 1
+        default: 20
+      required: false
+      description: Количество возращаемых организаций
+    - in: query
+      name: searchToken
+      schema:
+        type: string
+      required: false
+      description: Токен поиска
+  responses:
+    "200":
+      description: Возвращает список организаций
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "../../schemas/Organization.yaml"
+  security:
+    - SWCookieAuth: []

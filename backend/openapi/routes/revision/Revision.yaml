@@ -1,0 +1,54 @@
+get:
+  tags:
+    - Revisions
+  summary: Получить ревизию по revisionId
+  operationId: GetRevisionV1
+  parameters:
+    - in: query
+      name: revisionId
+      required: true
+      schema:
+        type: string
+  responses:
+    "200":
+      description: Вовращает данные по ревизии
+      content:
+        aplication/json:
+          schema:
+            $ref: "../../schemas/Revision.yaml"
+  security:
+    - SWCookieAuth: []
+post:
+  tags:
+    - Revisions
+  summary: Создание новой ревизии
+  operationId: CreateRevisionV1
+  requestBody:
+    required: true
+    content:
+      multipart/form-data:
+        schema:
+          type: object
+          required:
+            - dispute_id
+            - organization_id
+            - message_body
+          properties:
+            dispute_id:
+              type: string
+            organization_id:
+              type: string
+            message_body:
+              type: string
+            file:
+              type: string
+              format: binary
+  responses:
+    "201":
+      description: Возращает данные по созданной ревизии
+      content:
+        application/json:
+          schema:
+            $ref: "../../schemas/Revision.yaml"
+  security:
+    - SWCookieAuth: []

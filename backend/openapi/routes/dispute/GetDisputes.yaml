@@ -1,0 +1,39 @@
+get:
+  tags:
+    - Disputes
+  summary: Получить список споров
+  operationId: GetDisputesV1
+  parameters:
+    - in: query
+      name: offset
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+      required: false
+      description: Смещение с которого необходимо получить споры
+    - in: query
+      name: limit
+      schema:
+        type: integer
+        minimum: 1
+        default: 10
+      required: false
+      description: Количество возращаемых споров
+    - in: query
+      name: status
+      required: false
+      schema:
+        $ref: "../../schemas/EntityStatus.yaml"
+      description: Статус возвращаемых споров
+  responses:
+    "200":
+      description: Возвращает массив объектов "Dispute"
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "../../schemas/DisputeList.yaml"
+  security:
+    - SWCookieAuth: []

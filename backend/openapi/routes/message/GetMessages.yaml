@@ -1,0 +1,39 @@
+get:
+  tags:
+    - Messages
+  summary: Получить список сообщений
+  operationId: GetMessagesV1
+  parameters:
+    - in: query
+      name: offset
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+      required: false
+      description: Смещение с которого необходимо получить сообщения
+    - in: query
+      name: limit
+      schema:
+        type: integer
+        minimum: 1
+        default: 10
+      required: false
+      description: Количество возращаемых сообщений
+    - in: query
+      name: disputeId
+      schema:
+        type: string
+      required: true
+      description: ID спора, по которому нужно найти сообщения
+  responses:
+    "200":
+      description: Возвращает массив сообщений
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "../../schemas/Message.yaml"
+  security:
+    - SWCookieAuth: []

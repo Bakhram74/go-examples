@@ -1,0 +1,86 @@
+post:
+  tags:
+    - Disputes
+  summary: Создание нового спора
+  operationId: CreateDisputeV1
+  requestBody:
+    required: true
+    content:
+      multipart/form-data:
+        schema:
+          type: object
+          required:
+            - shortage_id
+            - organization_id
+            - message_body
+          properties:
+            shortage_id:
+              type: string
+            organization_id:
+              type: string
+            message_body:
+              type: string
+            file:
+              type: string
+              format: binary
+  responses:
+    "201":
+      description: Возращает данные по созданному спору
+      content:
+        application/json:
+          schema:
+            $ref: "../../schemas/CreateDispute.yaml"
+  security:
+    - SWCookieAuth: []
+get:
+  tags:
+    - Disputes
+  summary: Получить спор по dispute_id
+  operationId: GetDisputeV1
+  parameters:
+    - in: query
+      name: disputeId
+      schema:
+        type: string
+    - in: query
+      name: goodsId
+      schema:
+        type: integer
+  responses:
+    "200":
+      description: Успешный ответ
+      content:
+        aplication/json:
+          schema:
+            $ref: "../../schemas/Dispute.yaml"
+  security:
+    - SWCookieAuth: []
+put:
+  tags:
+    - Disputes
+  summary: Закрыть спор по dispute_id
+  operationId: CloseDisputeV1
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - dispute_id
+          properties:
+            dispute_id:
+              type: string
+            guilty_worker_ids:
+              type: array
+              items:
+                type: string
+  responses:
+    "200":
+      description: Закрытие спора и назначение виновных
+      content:
+        application/json:
+          schema:
+            $ref: "../../schemas/CloseDispute.yaml"
+  security:
+    - SWCookieAuth: []

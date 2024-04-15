@@ -1,0 +1,94 @@
+post:
+  tags:
+    - Auth
+  summary: Авторизация пользователя
+  operationId: AuthUser
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - phone_number
+            - code
+            - sticker
+          properties:
+            phone_number:
+              type: string
+            code:
+              type: integer
+            sticker:
+              type: string
+  parameters:
+    - in: header
+      name: X-Real-IP
+      schema:
+        type: string
+      required: true
+      description: IP пользователя
+    - in: header
+      name: deviceId
+      schema:
+        type: string
+      required: false
+      description: ID устройства пользователя      
+    - in: header
+      name: X-Request-ID
+      schema:
+        type: string
+      required: false
+      description: ID запроса пользователя для обеспечения идемпотентности
+    - in: header
+      name: deviceToken
+      schema:
+        type: string
+      required: false
+      description: Токен устройства для отправки пушей
+    - in: header
+      name: deviceName
+      schema:
+        type: string
+      required: false
+      description: Название устройства
+    - in: header
+      name: wb-apptype
+      schema:
+        type: string
+      required: false
+      description: Тип приложения клиента, тип устройства для отправки пушей
+    - in: header
+      name: wb-appversion
+      schema:
+        type: string
+      required: false
+      description: Версия приложения клиента
+    - in: header
+      name: X-No-Session
+      schema:
+        type: boolean
+      required: false
+      description: Если метод нужен только для аутентификации по телефону, без сохранения сессии. deviceId, deviceName, deviceToken и wb-apptype в данном случае указывать не нужно
+    - in: header
+      name: X-Forwarded-Host
+      schema:
+        type: string
+      required: false
+      description: Токен устройства для отправки пушейИсходный хост, который будет выставляться в поле Domain для Cookie
+    - in: header
+      name: X-Forwarded-Path
+      schema:
+        type: string
+      required: false
+      description: Токен устройства для отправки пушейИсходный путь, который будет выставляться в поле Path для Cookie
+  responses:
+    "201":
+      description: Возращает объект "TokenData"
+      content:
+        application/json:
+          schema:
+            $ref: "../../schemas/TokenData.yaml"
+      headers: 
+        Set-Cookie:
+          schema: 
+            type: string

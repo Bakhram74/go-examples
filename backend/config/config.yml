@@ -1,0 +1,19 @@
+app:
+  name: "single-window"
+  version: "1.0.0"
+  mode: "local" # local, stage, prod
+
+http:
+  port: "8000"
+
+log:
+  level: "debug"
+
+pg:
+  poolMax: 2
+
+minio:
+  useSsl: false
+
+casbin:
+  configPath: "../../config/casbin.conf"

@@ -1,0 +1,17 @@
+type: object
+required:
+  - user_id
+  - user_role
+  - organization_id
+properties:
+  user_id:
+    type: string
+  user_role:
+    type: string
+    x-oapi-codegen-extra-tags:
+      gorm: column:role
+  employee_id:
+    type: integer
+    format: int64
+  organization_id:
+    type: string

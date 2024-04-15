@@ -1,0 +1,30 @@
+post:
+  tags:
+    - Messages
+  summary: Создание нового сообщения
+  operationId: CreateMessageV1
+  requestBody:
+    required: true
+    content:
+      multipart/form-data:
+        schema:
+          type: object
+          required:
+            - dispute_id
+          properties:
+            dispute_id:
+              type: string
+            message_body:
+              type: string
+            file:
+              type: string
+              format: binary
+  responses:
+    "201":
+      description: Возращает данные по созданному сообщению
+      content:
+        application/json:
+          schema:
+            $ref: "../../schemas/CreateMsgResponse.yaml"
+  security:
+    - SWCookieAuth: []

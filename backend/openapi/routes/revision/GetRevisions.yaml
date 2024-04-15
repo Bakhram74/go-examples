@@ -1,0 +1,45 @@
+get:
+  tags:
+    - Revisions
+  summary: Получить список ревизий
+  operationId: GetRevisionsV1
+  parameters:
+    - in: query
+      name: disputeId
+      schema:
+        type: string
+      required: false
+      description: ID Спора для которого необходимо получить ревизии (если указан и disputeId, и status, то выборка осуществляется по disputeId)
+    - in: query
+      name: offset
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+      required: false
+      description: Смещение с которого необходимо получить ревизии
+    - in: query
+      name: limit
+      schema:
+        type: integer
+        minimum: 1
+        default: 10
+      required: false
+      description: Количество возращаемых ревизий
+    - in: query
+      name: status
+      required: false
+      schema:
+        $ref: "../../schemas/EntityStatus.yaml"
+      description: Статус возвращаемых ревизий (если указан и disputeId, и status, то выборка осуществляется по disputeId)
+  responses:
+    "200":
+      description: Возвращает массив объектов "Revision"
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "../../schemas/Revision.yaml"
+  security:
+    - SWCookieAuth: []

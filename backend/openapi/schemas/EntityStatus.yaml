@@ -1,0 +1,7 @@
+type: string
+enum:
+  - opened
+  - in_work
+  - closed
+  - any
+default: any

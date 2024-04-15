@@ -1,0 +1,36 @@
+get:
+  tags:
+    - Revisions
+  summary: Получить список кореспонденций по revision id
+  operationId: GetCorrespondencesV1
+  parameters:
+    - in: query
+      name: revision_id
+      required: true
+      schema:
+        type: string
+    - in: query
+      name: offset
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+      required: false
+    - in: query
+      name: limit
+      schema:
+        type: integer
+        minimum: 1
+        default: 10
+      required: false
+  responses:
+    "200":
+      description: Возвращает список кореспонденций
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "../../schemas/Correspondence.yaml"
+  security:
+    - SWCookieAuth: []

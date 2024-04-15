@@ -1,0 +1,8 @@
+type: object
+required:
+  - result
+properties:
+  result:
+    type: integer
+  error:
+    type: string
